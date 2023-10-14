@@ -21,7 +21,7 @@ jobs:
       - name: Test the Docker image
         run: |
           # Run the container without the default entrypoint
-          docker run --name test-container -d atas-ssg-builder:ci
+          docker run --name test-container -d atas-ssg-builder:latest
 
           # Check if nginx.conf exists and is valid
           docker exec test-container bash -c "if [ ! -f /etc/nginx/sites-available/site.conf ]; then echo 'nginx.conf does not exist!' && exit 1; else echo 'nginx.conf exists!'; fi"
@@ -40,6 +40,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
-          docker tag atas-ssg-builder:ci ghcr.io/atas/ssg-builder:latest
-          docker tag atas-ssg-builder:ci ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
+          docker tag atas-ssg-builder:latest ghcr.io/atas/ssg-builder:latest
+          docker tag atas-ssg-builder:latest ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
           docker push ghcr.io/atas/ssg-builder:latest
