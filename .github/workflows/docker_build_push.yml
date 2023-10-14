@@ -40,4 +40,5 @@ jobs:
         run: |
           echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
           docker tag ssg-builder:ci ghcr.io/atas/ssg-builder:latest
+          docker tag ssg-builder:ci ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
           docker push ghcr.io/atas/ssg-builder:latest
