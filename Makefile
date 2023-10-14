@@ -4,7 +4,7 @@ build:
 	docker build . -t atas-ssg-builder:latest
 
 multi-platform-build:
-	docker buildx build --load --platform linux/amd64,linux/arm64,linux/arm/v7 . -t atas-ssg-builder:latest
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 . -t ghcr.io/atas/ssg-builder:latest
 
 run-local-image:
 	docker run --rm -it -v $(shell pwd):/workspace atas-ssg-builder:latest
