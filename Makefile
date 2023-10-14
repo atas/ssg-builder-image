@@ -19,4 +19,3 @@ update-workflow-image:
 tag-workflow-image:
 	docker tag ghcr.io/atas/ssg-builder:latest ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
 	docker push ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
-
