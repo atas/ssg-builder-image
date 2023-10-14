@@ -1,0 +1,43 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main # Or whichever branch you wish to use
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ssg-builder:ci
+
+      # Optional: Test the Docker image (adapt as necessary)
+      - name: Test the Docker image
+        run: |
+          # Run the container without the default entrypoint
+          docker run --name test-container -d ssg-builder:ci
+
+          # Check if nginx.conf exists and is valid
+          docker exec test-container bash -c "if [ ! -f /etc/nginx/sites-available/site.conf ]; then echo 'nginx.conf does not exist!' && exit 1; else echo 'nginx.conf exists!'; fi"
+          docker exec test-container nginx -t
+
+          # Try to start nginx service
+          docker exec test-container service nginx start
+
+          # Check if nginx started correctly by checking if the process exists
+          docker exec test-container bash -c "if ! pgrep nginx > /dev/null; then echo 'Nginx did not start!' && exit 1; else echo 'Nginx started successfully!'; fi"
+
+          docker stop test-container
+          docker rm test-container
+
+      - name: Push the Docker image to GHCR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
+          docker tag ssg-builder:ci ghcr.io/atas/ssg-builder:latest
+          docker push ghcr.io/atas/ssg-builder:latest
