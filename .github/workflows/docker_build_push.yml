@@ -33,12 +33,9 @@ jobs:
           docker rm test-container
 
       - name: Login to GHCR
-        uses: docker/login-action@v1
         # if: github.ref == 'refs/heads/main'
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
 
       - name: Set up Docker Buildx
         # if: github.ref == 'refs/heads/main'
@@ -54,7 +51,8 @@ jobs:
         # if: github.ref == 'refs/heads/main'
         with:
           push: true
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64
+          #,linux/arm64,linux/arm/v7
           tags: |
             ghcr.io/atas/ssg-builder:latest
             ${{ env.IMAGE_TAG }}
