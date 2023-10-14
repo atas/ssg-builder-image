@@ -43,3 +43,4 @@ jobs:
           docker tag atas-ssg-builder:latest ghcr.io/atas/ssg-builder:latest
           docker tag atas-ssg-builder:latest ghcr.io/atas/ssg-builder:$(date +%Y%m%d%H%M)
           docker push ghcr.io/atas/ssg-builder:latest
+          docker push ghcr.io/atas/ssg-builder:$(date +%Y%m%d%H%M)
