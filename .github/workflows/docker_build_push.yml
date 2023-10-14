@@ -14,14 +14,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ssg-builder:ci
+        run: make build
         # Or use of that won't be found by GitHub Actions
         # docker buildx build --platform linux/amd64 system/workflow-image -t ghcr.io/atas/ssg-builder:latest
 
       - name: Test the Docker image
         run: |
           # Run the container without the default entrypoint
-          docker run --name test-container -d ssg-builder:ci
+          docker run --name test-container -d atas-ssg-builder:ci
 
           # Check if nginx.conf exists and is valid
           docker exec test-container bash -c "if [ ! -f /etc/nginx/sites-available/site.conf ]; then echo 'nginx.conf does not exist!' && exit 1; else echo 'nginx.conf exists!'; fi"
@@ -40,6 +40,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
-          docker tag ssg-builder:ci ghcr.io/atas/ssg-builder:latest
-          docker tag ssg-builder:ci ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
+          docker tag atas-ssg-builder:ci ghcr.io/atas/ssg-builder:latest
+          docker tag atas-ssg-builder:ci ghcr.io/atas/ssg-builder:$(shell date +%Y%m%d%H%M)
           docker push ghcr.io/atas/ssg-builder:latest
