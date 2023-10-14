@@ -32,10 +32,10 @@ jobs:
           docker stop test-container
           docker rm test-container
 
-      - name: Login to GHCR
-        # if: github.ref == 'refs/heads/main'
-        run: |
-          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
+      #   - name: Login to GHCR
+      #     # if: github.ref == 'refs/heads/main'
+      #     run: |
+      #       echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u atas --password-stdin
 
       - name: Set up Docker Buildx
         # if: github.ref == 'refs/heads/main'
