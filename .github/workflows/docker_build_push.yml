@@ -11,6 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Build the Docker image
         run: make multi-platform-build
         # Or use of that won't be found by GitHub Actions
