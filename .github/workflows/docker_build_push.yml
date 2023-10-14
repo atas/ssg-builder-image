@@ -3,7 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - main # Or whichever branch you wish to use
+      - main
 
 jobs:
   build-and-push:
@@ -16,7 +16,6 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag ssg-builder:ci
 
-      # Optional: Test the Docker image (adapt as necessary)
       - name: Test the Docker image
         run: |
           # Run the container without the default entrypoint
