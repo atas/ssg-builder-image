@@ -6,13 +6,16 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    libzip-dev \
+    unzip \
     nginx \
     node-less \
     git \
     jq \
     procps \
     vim \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install zip 
 
 # Remove default Nginx configuration
 RUN rm -rf /etc/nginx/sites-available/default \
